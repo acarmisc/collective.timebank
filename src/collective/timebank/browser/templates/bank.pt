@@ -1,0 +1,100 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="collective.timebank">
+<body>
+
+<metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main"
+        tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 class="documentFirstHeading" tal:content="context/title" />
+
+        <div class="discreet" tal:content="context/description" />
+
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+
+
+        <!--
+        <h2 i18n:translate="heading_sessions">Sessions</h2>
+        <dl>
+            <tal:block repeat="session view/sessions">
+                <dt>
+                    <a tal:attributes="href session/getURL"
+                       tal:content="session/Title" />
+                </dt>
+                <dd tal:content="session/Description" />
+            </tal:block>
+        </dl>
+        -->
+        <div class="row">
+            <div class="col-md-8">
+                <h3 i18n:translate="">Requests</h3>
+
+                <div class="timebank-requests-grid">
+                    <tal:block tal:repeat="item view/get_my_requests">
+                        <div class="panel panel-default col-md-4">
+                          <div class="panel-body">
+                              <h4><a tal:attributes="href item/absolute_url" tal:content="item/Title">Demo richiesta</a></h4>
+                              <p tal:content="item/Description">Lorem ipsum dolor sit amet bla bla bla</p>
+
+                              <div class="request-competence discreet">
+                                Lorem ipsum dolor sit amet
+                              </div>
+
+                          </div>
+                          <div class="panel-footer">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="lead"><i class="glyphicon glyphicon-time"></i> <span tal:content="python: view.format_minutes(item.minutes_amount)" /> H</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <a tal:attributes="href item/absolute_url" class="btn btn-primary btn-sm" i18n:translate=""><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
+                                </div>
+                            </div>
+
+                          </div>
+                        </div>
+                    </tal:block>
+
+                </div>
+
+
+
+            </div>
+            <div class="col-md-4">
+                <div class="row" tal:define="balance view/get_balance">
+                    <div class="panel panel-default">
+                      <div class="panel-heading" i18n:translate="">
+                          <h3 class="panel-title">Bank Profile</h3></div>
+                      <div class="panel-body">
+                        <h5>Balance</h5>
+                          <p class="lead"><span tal:content="python: view.format_minutes(balance.minutes_balance)" /> H</p>
+                        <h5>Your requests</h5>
+
+                        <h5>Your Bids</h5>
+                      </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <p class="">
+                        <a href="@@timebank-new-request" class="btn btn-primary" i18n:translate="">New Request</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+
+    </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

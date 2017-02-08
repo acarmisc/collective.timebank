@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="collective.timebank">
+<body>
+
+<metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main"
+        tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
+
+        <h1 class="documentFirstHeading" i18n:translate="">New Request</h1>
+
+
+
+        <div class="row">
+            <div class="col-md-8">
+                <div tal:repeat="msg view/messages">
+                    <div class="alert alert-success" tal:content="msg"></div>
+                </div>
+
+                <tal:block tal:condition="view/display_form">
+                    <form class="form-horizontal" method="post" tal:attributes="action python: context.absolute_url()+'/@@timebank-new-request'">
+                        <div class="form-group">
+                        <label for="input_title" class="col-sm-2 control-label" i18n:translate="">Title</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="input_title" name="title" placeholder="Title">
+                        </div>
+                        </div>
+
+                        <div class="row" style="height: 30px;"></div>
+
+                        <div class="form-group">
+                            <label for="input_description" class="col-sm-2 control-label" i18n:translate="">Description</label>
+                            <div class="col-sm-10">
+                              <textarea name="description" id="input_description"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row" style="height: 30px;"></div>
+
+                        <div class="form-group">
+                            <label for="input_title" class="col-sm-2 control-label" i18n:translate="">Amount <small>Minutes</small></label>
+                            <div class="col-sm-2">
+                                <input type="text"  value="1" min="0" max="1440"
+                                       class="form-control" id="input_amount" name="amount" placeholder="Minutes">
+                            </div>
+                        </div>
+
+                        <div class="row" style="height: 30px;"></div>
+
+                        <br />
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <a tal:attributes="href view/aq_parent/absolute_url" class="btn btn-cancel" i18n:translate="">Back to bank</a>
+                                <button type="submit" class="btn btn-default">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </tal:block>
+
+            </div>
+            <div class="col-md-4">
+
+            </div>
+        </div>
+
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+
+    </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

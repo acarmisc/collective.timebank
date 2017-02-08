@@ -1,0 +1,60 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="collective.timebank">
+<body>
+
+<metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main"
+        tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 class="documentFirstHeading" tal:content="context/title" />
+
+        <div class="discreet" tal:content="context/description" />
+
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+
+        <tal:block tal:condition="view/is_mine">
+            <div class="pull-right">
+                <a href="@@timebank-delete-request" class="btn bnt-danger" i18n:translate="">Delete request</a>
+            </div>
+        </tal:block>
+
+        <div class="row">
+            <div class="col-md-8">
+                <h3 i18n:translate="heading_sessions">Bids</h3>
+                <div class="alert alert-warning" role="alert" tal:condition="python: not view.get_bids()" i18n:translate="">No bids available.</div>
+                <ul class="list-group">
+                    <tal:block repeat="bid view/get_bids">
+                        <li class="list-group-item row">
+                            <div class="col-md-8" tal:content="bid/Author">
+
+                            </div>
+                            <div class="col-md-4">
+                                <a tal:attributes="href python: bid.absolute_url()+'/@@timebank-accept-bid'" class="btn bnt-primary" i18n:translate="">Accept</a>
+                            </div>
+                        </li>
+                    </tal:block>
+                </ul>
+            </div>
+
+            <div class="col-md-4">
+                <a tal:attributes="href python: context.absolute_url()+'/@@timebank-create-bid'" class="btn bnt-danger" i18n:translate="">Apply for bid</a>
+            </div>
+
+        </div>
+
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+
+    </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

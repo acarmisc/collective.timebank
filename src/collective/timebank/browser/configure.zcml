@@ -1,0 +1,54 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="collective.timebank">
+
+  <!-- Set overrides folder for Just-a-Bunch-Of-Templates product -->
+  <include package="z3c.jbot" file="meta.zcml" />
+  <browser:jbot
+      directory="overrides"
+      layer="collective.timebank.interfaces.ICollectiveTimebankLayer"
+      />
+
+  <!-- Publish static files -->
+  <browser:resourceDirectory
+      name="collective.timebank"
+      directory="static"
+      />
+
+  <browser:page
+      name="view"
+      for="collective.timebank.interfaces.IJobTimeBank"
+      class=".views.JobTimeBank"
+      template="templates/bank.pt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="view"
+      for="collective.timebank.interfaces.IJobTime"
+      class=".views.JobTime"
+      template="templates/job.pt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="timebank-new-request"
+      for="*"
+      layer="zope.interface.Interface"
+      class=".views.NewRequestView"
+      permission="zope2.View"
+      template="templates/new_request.pt"
+      />
+
+  <browser:page
+      name="timebank-create-bid"
+      for="*"
+      layer="zope.interface.Interface"
+      class=".views.NewBidView"
+      permission="zope2.View"
+      template="templates/new_bid.pt"
+      />
+
+</configure>
