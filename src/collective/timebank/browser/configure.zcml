@@ -51,4 +51,13 @@
       template="templates/new_bid.pt"
       />
 
+  <browser:page
+      name="timebank-accept-bid"
+      for="*"
+      layer="zope.interface.Interface"
+      class=".views.NewTransactionView"
+      permission="zope2.View"
+      template="templates/new_transaction.pt"
+      />
+
 </configure>

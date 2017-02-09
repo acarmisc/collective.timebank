@@ -67,13 +67,43 @@ class JobTimeBalanceItem:
 class JobTimeBidItem:
     def __init__(self, title, job):
         self.title = title
+        self.job = job
         self.container = api.content.get(path="/".join(job.getPhysicalPath()))
 
     def register(self):
         obj = api.content.create(
                 type='JobTimeBid',
                 title=self.title,
-                container=self.container.getObject()
+                job=self.job,
+                container=self.container
+        )
+
+        api.content.transition(obj=obj, transition='submit')
+
+        return obj
+
+
+class JobTimeTransactionItem:
+    def __init__(self, bid):
+        bid = api.content.get(path="/".join(bid.getPhysicalPath()))
+        container = bid.aq_inner
+        self.bid = bid
+        self.container = api.content.get(path="/".join(container.getPhysicalPath()))
+
+    def register(self):
+        bid = self.bid
+
+        bank = api.content.find(portal_type='JobTimeBank')
+
+        title = '%s minutes moved from %s to %s' % (bid.job.minutes_amount, bid.Creator(), bid.job.Creator())
+
+        #TODO: update balance
+        obj = api.content.create(
+            type='JobTimeTransaction',
+            title=title,
+            job=bid.job,
+            minutes_amount=bid.job.minutes_amount,
+            container=bank[0].getObject(),
         )
 
         api.content.transition(obj=obj, transition='submit')

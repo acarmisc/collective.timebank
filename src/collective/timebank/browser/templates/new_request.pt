@@ -64,7 +64,7 @@
 
             </div>
             <div class="col-md-4">
-
+                <a tal:attributes="href view/aq_parent/absolute_url" class="btn btn-cancel" i18n:translate="">Back to bank</a>
             </div>
         </div>
 

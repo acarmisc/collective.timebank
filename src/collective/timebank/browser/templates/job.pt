@@ -34,11 +34,13 @@
                 <ul class="list-group">
                     <tal:block repeat="bid view/get_bids">
                         <li class="list-group-item row">
-                            <div class="col-md-8" tal:content="bid/Author">
-
+                            <div class="col-md-8">
+                                <p tal:content="bid/Title" />
                             </div>
                             <div class="col-md-4">
-                                <a tal:attributes="href python: bid.absolute_url()+'/@@timebank-accept-bid'" class="btn bnt-primary" i18n:translate="">Accept</a>
+                                <a tal:attributes="href python: bid.absolute_url()+'/@@timebank-accept-bid'"
+                                   tal:condition="python: context.Creator() == bid.Creator()"
+                                   class="btn bnt-primary" i18n:translate="">Accept</a>
                             </div>
                         </li>
                     </tal:block>
@@ -46,7 +48,7 @@
             </div>
 
             <div class="col-md-4">
-                <a tal:attributes="href python: context.absolute_url()+'/@@timebank-create-bid'" class="btn bnt-danger" i18n:translate="">Apply for bid</a>
+                <a tal:condition="python: not view.get_bids()" tal:attributes="href python: context.absolute_url()+'/@@timebank-create-bid'" class="btn bnt-danger" i18n:translate="">Apply for bid</a>
             </div>
 
         </div>

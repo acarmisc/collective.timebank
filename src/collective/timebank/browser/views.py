@@ -1,6 +1,6 @@
 import logging
 from Products.Five.browser import BrowserView
-from collective.timebank.helper import JobTimeItem, JobTimeBalanceItem, JobTimeBidItem
+from collective.timebank.helper import JobTimeItem, JobTimeBalanceItem, JobTimeBidItem, JobTimeTransactionItem
 from collective.timebank import _
 from plone import api
 
@@ -48,7 +48,7 @@ class NewBidView(BrowserView):
 
     def __call__(self):
         title = "Bid from %s" % api.user.get_current()
-        item = JobTimeBidItem(title=title)
+        item = JobTimeBidItem(title=title, job=self.context)
 
         bid = item.register()
 
@@ -62,7 +62,14 @@ class JobTime(BrowserView):
         return True
 
     def get_bids(self):
-        return []
+        res = list()
+
+        items = api.content.find(portal_type='JobTimeBid', path='/'.join(self.context.getPhysicalPath()))
+
+        for i in items:
+            res.append(i.getObject())
+
+        return res
 
 
 class JobTimeBank(BrowserView):
@@ -73,9 +80,18 @@ class JobTimeBank(BrowserView):
 
         return "%s:%s" % (h, m)
 
+    def get_requests(self):
+        res = list()
+        objs = api.content.find(portal_type='JobTime')
+
+        for o in objs:
+            res.append(o.getObject())
+
+        return res
+
     def get_my_requests(self):
         res = list()
-        objs = api.content.find(portal_type='JobTime', Author=api.user.get_current())
+        objs = api.content.find(portal_type='JobTime', Creator=api.user.get_current())
 
         for o in objs:
             res.append(o.getObject())
@@ -83,7 +99,7 @@ class JobTimeBank(BrowserView):
         return res
 
     def get_balance(self):
-        balance = api.content.find(portal_type='JobTimeBalance', Author=api.user.get_current())
+        balance = api.content.find(portal_type='JobTimeBalance', Creator=api.user.get_current())
 
         if len(balance) > 1:
             logger.warning("Too many balance account. Getting the first")
@@ -95,3 +111,30 @@ class JobTimeBank(BrowserView):
 
         return balance[0].getObject()
 
+
+class NewTransactionView(BrowserView):
+    def format_minutes(self, min):
+        h = str(min / 60).zfill(2)
+        m = str(min % 60).zfill(2)
+
+        return "%s:%s" % (h, m)
+
+    def render(self):
+        return self.index()
+
+    def __call__(self):
+
+        self.display_confirm = True
+        self.transaction_done = False
+
+        self.messages = list()
+        request = self.request
+
+        if request.form.get('confirm'):
+            transaction = JobTimeTransactionItem(bid=self.context)
+            transaction = transaction.register()
+            self.display_confirm = False
+            self.messages.append(_(u"Transaction completed!"))
+            self.transaction_done = True
+
+        return self.render()

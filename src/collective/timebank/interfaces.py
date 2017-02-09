@@ -64,9 +64,9 @@ class IJobTimeBid(Interface):
     )
 
     job = RelationChoice(
-            title=_(u"Job"),
-            source=ObjPathSourceBinder(object_provides=IJobTime),
-            required=True,
+        title=_(u"Job"),
+        source=ObjPathSourceBinder(object_provides=IJobTime),
+        required=True,
     )
 
 

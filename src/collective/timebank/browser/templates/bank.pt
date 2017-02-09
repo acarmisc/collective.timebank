@@ -39,7 +39,7 @@
                 <h3 i18n:translate="">Requests</h3>
 
                 <div class="timebank-requests-grid">
-                    <tal:block tal:repeat="item view/get_my_requests">
+                    <tal:block tal:repeat="item view/get_requests">
                         <div class="panel panel-default col-md-4">
                           <div class="panel-body">
                               <h4><a tal:attributes="href item/absolute_url" tal:content="item/Title">Demo richiesta</a></h4>

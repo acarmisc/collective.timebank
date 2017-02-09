@@ -1,0 +1,69 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="collective.timebank">
+<body>
+
+<metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main"
+        tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
+
+        <h1 class="documentFirstHeading" i18n:translate="">Time Transaction</h1>
+
+
+
+        <div class="row">
+            <div class="col-md-8">
+                <div tal:repeat="msg view/messages">
+                    <div class="alert alert-success" tal:content="msg"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div style="text-align: center;">
+                            <p><span style="font-size: 500%"><i class="glyphicon glyphicon-user"></i></span></p>
+                            <h3 class="lead">From<br/> <b tal:content="context/Creator">User</b></h3>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div style="text-align: center; padding-top: 30px;">
+                            <div style="font-size: 300%" class="">
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                                <i class="glyphicon glyphicon-time"></i>
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </div>
+                            <h2 class="lead">
+                                <span tal:content="python: view.format_minutes(context.job.minutes_amount)" /> H
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div style="text-align: center;">
+                            <p ><span style="font-size: 500%"><i class="glyphicon glyphicon-user"></i></span></p>
+                            <h3 class="lead">To<br/> <b tal:content="context/job/Creator">User</b></h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="text-align: center" tal:condition="python: not view.transaction_done">
+                    <a tal:attributes="href python: '@@timebank-accept-bid?confirm=true'" class="btn btn-primary btn-lg" i18n:translate="">Confirm!</a>
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <a tal:attributes="href view/aq_parent/aq_parent/absolute_url" class="btn btn-cancel" i18n:translate="">Back to Job</a>
+            </div>
+        </div>
+
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+
+    </tal:main-macro>
+</metal:main>
+
+</body>
+</html>
